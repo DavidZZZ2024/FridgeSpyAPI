@@ -1,0 +1,1 @@
+"""FridgeSpy API application package."""
