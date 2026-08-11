@@ -1,7 +1,9 @@
 import logging
+import os
 
 import snowflake.connector
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app.routers import metadata, products, statistics
@@ -28,6 +30,25 @@ app = FastAPI(
     version="1.0.0",
 )
 logger = logging.getLogger("fridgespy")
+
+default_frontend_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://fridgespy-web.onrender.com",
+]
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("FRONTEND_ORIGINS", ",".join(default_frontend_origins)).split(",")
+    if origin.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=False,
+    allow_methods=["GET", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/", response_model=HomeResponse)
