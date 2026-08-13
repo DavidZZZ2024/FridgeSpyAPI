@@ -37,3 +37,9 @@ export function getProducts(params = {}) {
   const queryString = query.toString()
   return request(`/products${queryString ? `?${queryString}` : ''}`)
 }
+
+export function getStatisticsSummary() { return request('/statistics/summary') }
+export function getRetailerStatistics() { return request('/statistics/retailers') }
+export function getBrandStatistics() { return request('/statistics/brands') }
+export function getPriceDistribution() { return request('/statistics/price-distribution') }
+export function getPriceTrend() { return request('/statistics/price-trend') }
