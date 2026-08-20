@@ -52,7 +52,15 @@ def get_products(
         SELECT retailer, brand, title, model, price_raw, date_raw
         FROM {SOURCE}
         WHERE {' AND '.join(filters)}
-        ORDER BY price_raw ASC
+        AND date_raw = DATEADD(
+            day,
+            -1,
+            CONVERT_TIMEZONE(
+                'Australia/Melbourne',
+                CURRENT_TIMESTAMP()
+            )::DATE
+        )
+        ORDER BY price_raw DESC
         LIMIT %s OFFSET %s
     """
     params.extend((limit, offset))
